@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
+import '../utils/sound_manger.dart';
 import '../widgets/gift_price.dart';
 
 class Shop extends StatefulWidget {
@@ -76,7 +78,10 @@ class _ShopState extends State<Shop> {
                         ),
                       ),
                     ),
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () {
+                      SoundManager.playButtonClickSound();
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ),
                 leadingWidth: 28.w,
@@ -90,7 +95,7 @@ class _ShopState extends State<Shop> {
                     Column(
                       children: [
                         Text(
-                          "Shop",
+                          AppLocalizations.of(context)!.shop,
                           style: TextStyle(
                             fontFamily: "BerkshireSwash",
                             fontSize: 32.sp,
@@ -113,32 +118,32 @@ class _ShopState extends State<Shop> {
                         context: context,
                         removeTop: true,
                         child: GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                            ),
-                            itemCount: giftCards.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Column(
-                                children: [
-                                  Container(
-                                    width: screen_width * 0.18,
-                                    height: screen_width * 0.1,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(giftCards[index]
-                                                ['image']
-                                            .toString()),
-                                        fit: BoxFit.cover,
-                                      ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                          ),
+                          itemCount: giftCards.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Column(
+                              children: [
+                                Container(
+                                  width: screen_width * 0.18,
+                                  height: screen_width * 0.18,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          giftCards[index]['image'].toString()),
+                                      fit: BoxFit.fill,
                                     ),
                                   ),
-                                  GiftPrice(
-                                    price: giftCards[index]['price'].toString(),
-                                  ),
-                                ],
-                              );
-                            }),
+                                ),
+                                GiftPrice(
+                                  price: giftCards[index]['price'].toString(),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                       ),
                     ),
                     Padding(
@@ -160,6 +165,7 @@ class _ShopState extends State<Shop> {
                               ),
                             ),
                             onTap: () {
+                              SoundManager.playButtonClickSound();
                               Navigator.pushNamed(context, setting);
                             },
                           ),
@@ -176,6 +182,7 @@ class _ShopState extends State<Shop> {
                               ),
                             ),
                             onTap: () {
+                              SoundManager.playButtonClickSound();
                               Navigator.pushNamed(context, shop);
                             },
                           ),

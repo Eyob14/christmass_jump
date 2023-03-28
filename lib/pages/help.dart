@@ -5,14 +5,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/constants.dart';
 import '../utils/sound_manger.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class Help extends StatelessWidget {
+  const Help({super.key});
 
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     final screen_width = MediaQuery.of(context).size.width;
@@ -54,60 +49,106 @@ class _HomeState extends State<Home> {
                     color: Colors.transparent,
                   ),
                 ),
-                automaticallyImplyLeading: false,
-              ),
-              body: Padding(
-                padding: EdgeInsets.only(top: 13.5.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      height: screen_height * 0.2,
+                automaticallyImplyLeading: true,
+                leading: Padding(
+                  padding: EdgeInsets.only(left: 6.w, top: 2.h),
+                  child: GestureDetector(
+                    child: Container(
+                      width: screen_width * 0.18,
+                      height: screen_width * 0.18,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(christmass),
+                          image: AssetImage(backButton),
                           fit: BoxFit.fill,
                         ),
                       ),
                     ),
-                    Column(
+                    onTap: () {
+                      SoundManager.playButtonClickSound();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+                leadingWidth: 28.w,
+                toolbarHeight: 9.h,
+              ),
+              body: Padding(
+                padding: EdgeInsets.only(top: 5.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.howToPlay,
+                      style: TextStyle(
+                        fontFamily: "BerkshireSwash",
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFFC52321),
+                      ),
+                    ),
+                    Stack(
                       children: [
-                        GestureDetector(
+                        Container(
+                          width: screen_width * 0.88,
+                          height: screen_width * 0.88,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: screen_width * 0.78,
+                          height: screen_width * 0.78,
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: screen_width * 0.78,
+                                height: screen_width * 0.78,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(howToPlayImage),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 10,
+                                bottom: 10,
+                                left: 10,
+                                right: 10,
+                                child: Container(
+                                  padding: EdgeInsets.only(
+                                      left: 4.w, top: 2.2.w, bottom: 2.2.w),
+                                  width: screen_width * 0.5,
+                                  height: screen_width * 0.5,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.howToPlayText,
+                                    style: TextStyle(
+                                      fontFamily: "BerkshireSwash",
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
                           child: Container(
-                            width: screen_width * 0.7,
-                            height: screen_height * 0.08,
+                            width: screen_width * 0.18,
+                            height: screen_width * 0.18,
                             decoration: const BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage(playButtonImage),
+                                image: AssetImage(howToPlayImage),
                                 fit: BoxFit.fill,
                               ),
                             ),
                           ),
-                          onTap: () {
-                            SoundManager.playButtonClickSound();
-                            Navigator.pushNamed(context, game);
-                            SoundManager.playGameSound();
-                          },
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        GestureDetector(
-                          child: Text(
-                            AppLocalizations.of(context)!.howToPlay,
-                            style: TextStyle(
-                              fontFamily: "BerkshireSwash",
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.w700,
-                              decoration: TextDecoration.underline,
-                              decorationThickness: 2,
-                              color: Color(0xFFC52321),
-                            ),
-                          ),
-                          onTap: () {
-                            SoundManager.playButtonClickSound();
-                            Navigator.pushNamed(context, help);
-                          },
                         ),
                       ],
                     ),
@@ -130,7 +171,6 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             onTap: () {
-                              SoundManager.playButtonClickSound();
                               Navigator.pushNamed(context, setting);
                             },
                           ),
@@ -147,7 +187,6 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             onTap: () {
-                              SoundManager.playButtonClickSound();
                               Navigator.pushNamed(context, shop);
                             },
                           ),

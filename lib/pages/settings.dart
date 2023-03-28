@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
+import '../utils/sound_manger.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({super.key});
-
-  @override
-  State<Settings> createState() => _SettingsState();
-}
-
-class _SettingsState extends State<Settings> {
+class Settings extends StatelessWidget {
+  const Settings({super.key, required this.setLocale});
+  final void Function(Locale locale) setLocale;
   @override
   Widget build(BuildContext context) {
     final screen_width = MediaQuery.of(context).size.width;
@@ -66,7 +63,10 @@ class _SettingsState extends State<Settings> {
                         ),
                       ),
                     ),
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () {
+                      SoundManager.playButtonClickSound();
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ),
                 leadingWidth: 28.w,
@@ -78,7 +78,7 @@ class _SettingsState extends State<Settings> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      "Settings",
+                      AppLocalizations.of(context)!.settings,
                       style: TextStyle(
                         fontFamily: "BerkshireSwash",
                         fontSize: 32.sp,
@@ -89,7 +89,7 @@ class _SettingsState extends State<Settings> {
                     Column(
                       children: [
                         Text(
-                          "Music",
+                          AppLocalizations.of(context)!.settingMusic,
                           style: TextStyle(
                             fontFamily: "BerkshireSwash",
                             fontSize: 25.sp,
@@ -114,7 +114,10 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                SoundManager.playButtonClickSound();
+                                SoundManager.toggleSound(true);
+                              },
                             ),
                             SizedBox(
                               width: 12.w,
@@ -130,7 +133,10 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                SoundManager.playButtonClickSound();
+                                SoundManager.toggleSound(false);
+                              },
                             ),
                           ],
                         ),
@@ -139,7 +145,7 @@ class _SettingsState extends State<Settings> {
                     Column(
                       children: [
                         Text(
-                          "Language",
+                          AppLocalizations.of(context)!.settingLanguage,
                           style: TextStyle(
                             fontFamily: "BerkshireSwash",
                             fontSize: 25.sp,
@@ -164,7 +170,11 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                SoundManager.playButtonClickSound();
+                                setLocale(const Locale.fromSubtags(
+                                    languageCode: 'en'));
+                              },
                             ),
                             SizedBox(
                               width: 12.w,
@@ -180,7 +190,11 @@ class _SettingsState extends State<Settings> {
                                   ),
                                 ),
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                SoundManager.playButtonClickSound();
+                                setLocale(const Locale.fromSubtags(
+                                    languageCode: 'pt'));
+                              },
                             ),
                           ],
                         ),

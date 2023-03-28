@@ -1,27 +1,46 @@
 import 'package:christmass_jump/pages/game.dart';
 import 'package:christmass_jump/pages/game_over.dart';
+import 'package:christmass_jump/pages/game_page.dart';
+import 'package:christmass_jump/pages/help.dart';
 import 'package:christmass_jump/pages/home.dart';
 import 'package:christmass_jump/pages/settings.dart';
 import 'package:christmass_jump/pages/shop.dart';
 import 'package:christmass_jump/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
         return MaterialApp(
+          locale: _locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           title: 'Christmass Jump',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
           onGenerateRoute: (RouteSettings settings) {
             switch (settings.name) {
               case home:
@@ -33,7 +52,9 @@ class MyApp extends StatelessWidget {
                 );
               case setting:
                 return PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => const Settings(),
+                  pageBuilder: (_, __, ___) => Settings(
+                    setLocale: setLocale,
+                  ),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),
@@ -59,11 +80,18 @@ class MyApp extends StatelessWidget {
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),
                 );
+              case help:
+                return PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => const Help(),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          FadeTransition(opacity: animation, child: child),
+                );
               default:
                 return null;
             }
           },
-          initialRoute: home,
+          initialRoute: game,
         );
       },
       maxTabletWidth: 900, // Optional

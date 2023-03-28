@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
+import '../utils/sound_manger.dart';
 
 class GameOver extends StatefulWidget {
   const GameOver({super.key});
@@ -66,7 +68,10 @@ class _GameOverState extends State<GameOver> {
                         ),
                       ),
                     ),
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () {
+                      SoundManager.playButtonClickSound();
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ),
                 leadingWidth: 28.w,
@@ -80,7 +85,7 @@ class _GameOverState extends State<GameOver> {
                     Column(
                       children: [
                         Text(
-                          "Game over",
+                          AppLocalizations.of(context)!.gameOver,
                           style: TextStyle(
                             fontFamily: "BerkshireSwash",
                             fontSize: 28.sp,
@@ -94,7 +99,7 @@ class _GameOverState extends State<GameOver> {
                         Column(
                           children: [
                             Text(
-                              "your gifts:",
+                              AppLocalizations.of(context)!.yourGifts,
                               style: TextStyle(
                                 fontFamily: "BerkshireSwash",
                                 fontSize: 22.sp,
@@ -128,6 +133,7 @@ class _GameOverState extends State<GameOver> {
                             ),
                           ),
                           onTap: () {
+                            SoundManager.playButtonClickSound();
                             Navigator.pushNamed(context, game);
                           },
                         ),
@@ -153,6 +159,7 @@ class _GameOverState extends State<GameOver> {
                               ),
                             ),
                             onTap: () {
+                              SoundManager.playButtonClickSound();
                               Navigator.pushNamed(context, setting);
                             },
                           ),
@@ -169,6 +176,7 @@ class _GameOverState extends State<GameOver> {
                               ),
                             ),
                             onTap: () {
+                              SoundManager.playButtonClickSound();
                               Navigator.pushNamed(context, shop);
                             },
                           ),
