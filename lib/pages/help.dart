@@ -75,32 +75,46 @@ class Help extends StatelessWidget {
               body: Padding(
                 padding: EdgeInsets.only(top: 5.h),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text(
-                      AppLocalizations.of(context)!.howToPlay,
-                      style: TextStyle(
-                        fontFamily: "BerkshireSwash",
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFFC52321),
-                      ),
+                    Column(
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.howToPlay1,
+                          style: TextStyle(
+                            fontFamily: "BerkshireSwash",
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFFC52321),
+                          ),
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!.howToPlay2,
+                          style: TextStyle(
+                            fontFamily: "BerkshireSwash",
+                            fontSize: 28.sp,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFFC52321),
+                          ),
+                        ),
+                      ],
                     ),
                     Stack(
                       children: [
-                        Container(
-                          width: screen_width * 0.88,
-                          height: screen_width * 0.88,
-                          color: Colors.white,
-                        ),
                         SizedBox(
-                          width: screen_width * 0.78,
-                          height: screen_width * 0.78,
+                          width: screen_width * 0.88,
+                          height: screen_width * 1,
+                          // color: Colors.white,
+                        ),
+                        Positioned(
+                          top: 55,
+                          left: 4,
                           child: Stack(
                             children: [
                               Container(
-                                width: screen_width * 0.78,
-                                height: screen_width * 0.78,
+                                width: screen_width * 0.85,
+                                height: screen_width * 0.85,
                                 decoration: const BoxDecoration(
                                   image: DecorationImage(
                                     image: AssetImage(howToPlayImage),
@@ -116,8 +130,6 @@ class Help extends StatelessWidget {
                                 child: Container(
                                   padding: EdgeInsets.only(
                                       left: 4.w, top: 2.2.w, bottom: 2.2.w),
-                                  width: screen_width * 0.5,
-                                  height: screen_width * 0.5,
                                   decoration: BoxDecoration(
                                     color: Colors.green,
                                     borderRadius: BorderRadius.circular(10),
@@ -137,14 +149,14 @@ class Help extends StatelessWidget {
                           ),
                         ),
                         Positioned(
-                          top: 0,
-                          right: 0,
+                          top: 1,
+                          right: 8,
                           child: Container(
-                            width: screen_width * 0.18,
-                            height: screen_width * 0.18,
+                            width: 23.w,
+                            height: 23.w,
                             decoration: const BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage(howToPlayImage),
+                                image: AssetImage(closeButton),
                                 fit: BoxFit.fill,
                               ),
                             ),
@@ -153,10 +165,10 @@ class Help extends StatelessWidget {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 6.w),
+                      padding: EdgeInsets.only(top: 6.h, left: 0, bottom: 4.h),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           GestureDetector(
                             child: Container(

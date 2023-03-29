@@ -1,6 +1,7 @@
 {
     "language": "Portuguese",
-    "howToPlay": "Como jogar?",
+    "howToPlay1": "Como",
+    "howToPlay2": "jogar?",
     "settings": "Configurações",
     "settingLanguage": "Língua",
     "settingMusic": "Música",

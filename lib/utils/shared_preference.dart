@@ -40,6 +40,15 @@ class SharedPreferenceHelper {
     final prefs = await SharedPreferenceHelper.prefs;
     return prefs.getString('selectedBall');
   }
+    static Future<bool> setSelectedPlayingBall(String value) async {
+    final prefs = await SharedPreferenceHelper.prefs;
+    return prefs.setString('selectedPlayingBall', value);
+  }
+
+  static Future<String?> getSelectedPlayingBall() async {
+    final prefs = await SharedPreferenceHelper.prefs;
+    return prefs.getString('selectedPlayingBall');
+  }
 }
 
 // how to use it

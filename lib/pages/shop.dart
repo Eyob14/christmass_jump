@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/constants.dart';
+import '../utils/gift_card_model.dart';
+import '../utils/shared_preference.dart';
 import '../utils/sound_manger.dart';
 import '../widgets/gift_price.dart';
 
@@ -14,16 +17,44 @@ class Shop extends StatefulWidget {
 }
 
 class _ShopState extends State<Shop> {
+  int? _gifts;
+  String? _selectedBallName;
+
+  void allGifts() async {
+    final value = await SharedPreferenceHelper.getGifts();
+    setState(() {
+      _gifts = value;
+    });
+  }
+
+  Future<void> selectedBall() async {
+    final value = await SharedPreferenceHelper.getSelectedBall();
+    setState(() {
+      _selectedBallName = value;
+    });
+  }
+
+  void newBallSelected(String ball) async {
+    await SharedPreferenceHelper.setSelectedBall(ball);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    selectedBall();
+    allGifts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screen_width = MediaQuery.of(context).size.width;
     final screen_height = MediaQuery.of(context).size.height;
 
     final giftCards = [
-      {"image": firstGift, "price": 40},
-      {"image": secondGift, "price": 40},
-      {"image": thirdGift, "price": 80},
-      {"image": fourthGift, "price": 140},
+      GiftCardModel(image: firstGift, price: 40),
+      GiftCardModel(image: secondGift, price: 40),
+      GiftCardModel(image: thirdGift, price: 80),
+      GiftCardModel(image: fourthGift, price: 140),
     ];
 
     return NotificationListener<OverscrollIndicatorNotification>(
@@ -88,7 +119,7 @@ class _ShopState extends State<Shop> {
                 toolbarHeight: 9.h,
               ),
               body: Padding(
-                padding: EdgeInsets.only(top: 13.5.h),
+                padding: EdgeInsets.only(top: 2.h),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -106,8 +137,8 @@ class _ShopState extends State<Shop> {
                         SizedBox(
                           height: 4.h,
                         ),
-                        const GiftPrice(
-                          price: 120,
+                        GiftPrice(
+                          price: _gifts,
                         ),
                       ],
                     ),
@@ -124,23 +155,41 @@ class _ShopState extends State<Shop> {
                           ),
                           itemCount: giftCards.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              children: [
-                                Container(
-                                  width: screen_width * 0.18,
-                                  height: screen_width * 0.18,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          giftCards[index]['image'].toString()),
-                                      fit: BoxFit.fill,
+                            return GestureDetector(
+                              onTap: () {
+                                if (_gifts! >= giftCards[index].price) {
+                                  newBallSelected(giftCards[index].image);
+                                  _selectedBallName = giftCards[index].image;
+                                }
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: screen_width * 0.18,
+                                    height: screen_width * 0.18,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image:
+                                            AssetImage(giftCards[index].image),
+                                        fit: BoxFit.fill,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                GiftPrice(
-                                  price: giftCards[index]['price'].toString(),
-                                ),
-                              ],
+                                  _selectedBallName == giftCards[index].image
+                                      ? Text(
+                                          AppLocalizations.of(context)!
+                                              .selected,
+                                          style: TextStyle(
+                                            fontFamily: "BerkshireSwash",
+                                            fontSize: 23.sp,
+                                            fontWeight: FontWeight.w800,
+                                            color: Color(0xFFC52321),
+                                          ),
+                                        )
+                                      : GiftPrice(
+                                          price: giftCards[index].price),
+                                ],
+                              ),
                             );
                           },
                         ),

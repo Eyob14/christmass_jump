@@ -1,22 +1,24 @@
 import 'package:christmass_jump/pages/game.dart';
 import 'package:christmass_jump/pages/game_over.dart';
-import 'package:christmass_jump/pages/game_page.dart';
 import 'package:christmass_jump/pages/help.dart';
 import 'package:christmass_jump/pages/home.dart';
 import 'package:christmass_jump/pages/settings.dart';
 import 'package:christmass_jump/pages/shop.dart';
 import 'package:christmass_jump/utils/constants.dart';
+import 'package:christmass_jump/utils/shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -29,6 +31,19 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _locale = locale;
     });
+  }
+
+  void isBasicSetup() async {
+    await SharedPreferenceHelper.setGifts(0);
+    await SharedPreferenceHelper.setSelectedBall(firstGift);
+    await SharedPreferenceHelper.setSelectedPlayingBall(firstBall);
+    return;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    isBasicSetup();
   }
 
   @override
@@ -60,8 +75,9 @@ class _MyAppState extends State<MyApp> {
                           FadeTransition(opacity: animation, child: child),
                 );
               case gameOver:
+                final args = settings.arguments as int;
                 return PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => const GameOver(),
+                  pageBuilder: (_, __, ___) => GameOver(gifts: args),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),
@@ -91,7 +107,7 @@ class _MyAppState extends State<MyApp> {
                 return null;
             }
           },
-          initialRoute: game,
+          initialRoute: home,
         );
       },
       maxTabletWidth: 900, // Optional

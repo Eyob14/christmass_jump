@@ -15,6 +15,7 @@ const gameSound = 'sound/MainTheme9.mp3';
 // background related Images
 const backgroundImage = 'assets/images/background.png';
 const gameBackgroundImage = 'assets/images/gamePageBackground.png';
+
 // const decoration = 'decoration.png';
 const decorationImage = 'assets/images/decoration.png';
 const christmass = 'assets/images/chritmassJumpText.png';
@@ -40,6 +41,12 @@ const fourthGift = 'assets/images/giftFour.png';
 
 // help page
 const howToPlayImage = 'assets/images/howToPlayImage.png';
+const closeButton = 'assets/images/closeButton.png';
 
-// balls
+// game Page
 const firstBall = "assets/images/ballOne.png";
+const secondBall = "assets/images/ballTwo.png";
+const thirdBall = "assets/images/ballThree.png";
+const fourthBall = "assets/images/ballFour.png";
+
+const halfCircle = "assets/images/halfcircle.png";

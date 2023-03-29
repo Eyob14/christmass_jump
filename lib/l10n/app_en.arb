@@ -1,6 +1,7 @@
 {
     "language": "English",
-    "howToPlay": "How to play?",
+    "howToPlay1": "How to",
+    "howToPlay2": "play?",
     "settings": "Settings",
     "settingLanguage": "Language",
     "settingMusic": "Music",

@@ -8,17 +8,16 @@ class SoundManager {
   static final _gameAudioPlayer = AudioPlayer();
   static final _buttonAudioPlayer = AudioPlayer();
 
-  static Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  static final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   static Future<bool> isSoundEnabled() async {
     final prefs = await _prefs;
-    return prefs.getBool('isSoundEnabled') ?? true;
+    return prefs.getBool('isSoundEnabled') ?? false;
   }
 
   static Future<void> playButtonClickSound() async {
     final isEnabled = await isSoundEnabled();
     if (!isEnabled) return;
-    print("*******************button clicked****************");
     _buttonAudioPlayer.play(AssetSource(buttonClickSound));
   }
 

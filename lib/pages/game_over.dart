@@ -3,16 +3,40 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../utils/constants.dart';
+import '../utils/shared_preference.dart';
 import '../utils/sound_manger.dart';
 
 class GameOver extends StatefulWidget {
-  const GameOver({super.key});
+  final int gifts;
+  const GameOver({super.key, required this.gifts});
 
   @override
   State<GameOver> createState() => _GameOverState();
 }
 
 class _GameOverState extends State<GameOver> {
+  int? _currentGifts;
+
+  void retrieveTotalScore() async {
+    final int? value = await SharedPreferenceHelper.getGifts();
+    setState(() {
+      _currentGifts = value;
+    });
+  }
+
+  Future<void> saveNewGifts() async {
+    if (_currentGifts != null) {
+      int newValue = _currentGifts!.toInt() + widget.gifts;
+      await SharedPreferenceHelper.setGifts(newValue);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    retrieveTotalScore();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screen_width = MediaQuery.of(context).size.width;
@@ -69,8 +93,10 @@ class _GameOverState extends State<GameOver> {
                       ),
                     ),
                     onTap: () {
+                      saveNewGifts();
                       SoundManager.playButtonClickSound();
-                      Navigator.of(context).pop();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, home, (route) => false);
                     },
                   ),
                 ),
@@ -108,7 +134,9 @@ class _GameOverState extends State<GameOver> {
                               ),
                             ),
                             Text(
-                              "12",
+                              widget.gifts != null
+                                  ? widget.gifts.toString()
+                                  : "0",
                               style: TextStyle(
                                 fontFamily: "BerkshireSwash",
                                 fontSize: 22.sp,
@@ -133,8 +161,9 @@ class _GameOverState extends State<GameOver> {
                             ),
                           ),
                           onTap: () {
+                            saveNewGifts();
                             SoundManager.playButtonClickSound();
-                            Navigator.pushNamed(context, game);
+                            Navigator.popAndPushNamed(context, game);
                           },
                         ),
                       ],
@@ -159,6 +188,7 @@ class _GameOverState extends State<GameOver> {
                               ),
                             ),
                             onTap: () {
+                              saveNewGifts();
                               SoundManager.playButtonClickSound();
                               Navigator.pushNamed(context, setting);
                             },
@@ -176,6 +206,7 @@ class _GameOverState extends State<GameOver> {
                               ),
                             ),
                             onTap: () {
+                              saveNewGifts();
                               SoundManager.playButtonClickSound();
                               Navigator.pushNamed(context, shop);
                             },

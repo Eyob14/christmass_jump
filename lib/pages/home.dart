@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
                         ),
                         GestureDetector(
                           child: Text(
-                            AppLocalizations.of(context)!.howToPlay,
+                            "${AppLocalizations.of(context)!.howToPlay1} ${AppLocalizations.of(context)!.howToPlay2}",
                             style: TextStyle(
                               fontFamily: "BerkshireSwash",
                               fontSize: 20.sp,
