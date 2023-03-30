@@ -1,35 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../utils/constants.dart';
-import '../utils/shared_preference.dart';
 
-class PlayingBall extends StatefulWidget {
-  const PlayingBall({super.key});
-
-  @override
-  State<PlayingBall> createState() => _PlayingBallState();
-}
-
-class _PlayingBallState extends State<PlayingBall> {
-  String? _selectedBallName;
-
-  void selectedBall() async {
-    final value = await SharedPreferenceHelper.getSelectedPlayingBall();
-    setState(() {
-      _selectedBallName = value;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    selectedBall();
-  }
+class PlayingBall extends StatelessWidget {
+  final String? selectedBallName;
+  const PlayingBall({super.key, required this.selectedBallName});
 
   @override
   Widget build(BuildContext context) {
-    return _selectedBallName != null
-        ? Image.asset(_selectedBallName!)
-        : Image.asset(firstBall);
+    return SizedBox(
+      width: 8.h,
+      height: 8.h,
+      child: selectedBallName != null
+          ? Image.asset(selectedBallName!)
+          : Image.asset(firstBall),
+    );
   }
 }

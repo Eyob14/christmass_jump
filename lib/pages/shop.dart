@@ -10,15 +10,24 @@ import '../utils/sound_manger.dart';
 import '../widgets/gift_price.dart';
 
 class Shop extends StatefulWidget {
-  const Shop({super.key});
+  final playingBallsNames = {
+    1: secondBall,
+    2: thirdBall,
+    3: fourthBall,
+  };
+  Shop({super.key});
 
   @override
   State<Shop> createState() => _ShopState();
 }
 
 class _ShopState extends State<Shop> {
-  int? _gifts;
-  String? _selectedBallName;
+  static int? _gifts;
+  static String? _selectedBallName;
+
+  static bool? _isSecondBallBought;
+  static bool? _isThirdBallBought;
+  static bool? _isFourthBallBought;
 
   void allGifts() async {
     final value = await SharedPreferenceHelper.getGifts();
@@ -27,10 +36,22 @@ class _ShopState extends State<Shop> {
     });
   }
 
-  Future<void> selectedBall() async {
+  void selectedBall() async {
     final value = await SharedPreferenceHelper.getSelectedBall();
     setState(() {
       _selectedBallName = value;
+    });
+  }
+
+  void isBallBought() async {
+    final second = await SharedPreferenceHelper.getSecondBallBought();
+    final third = await SharedPreferenceHelper.getThirdBallBought();
+    final fourth = await SharedPreferenceHelper.getFourthBallBought();
+
+    setState(() {
+      _isSecondBallBought = second;
+      _isThirdBallBought = third;
+      _isFourthBallBought = fourth;
     });
   }
 
@@ -38,11 +59,48 @@ class _ShopState extends State<Shop> {
     await SharedPreferenceHelper.setSelectedBall(ball);
   }
 
+  void newPlayingBallSelected(String newBall) async {
+    await SharedPreferenceHelper.setSelectedPlayingBall(newBall);
+  }
+
+  void buyNewBall(int ballPrice, int index) async {
+    if (_gifts != null) {
+      int newValue = _gifts!.toInt() - ballPrice;
+      await SharedPreferenceHelper.setGifts(newValue);
+    }
+
+    switch (index) {
+      case 1:
+        await SharedPreferenceHelper.setSecondBallBought(true);
+        break;
+      case 2:
+        await SharedPreferenceHelper.setThirdBallBought(true);
+        break;
+      case 3:
+        await SharedPreferenceHelper.setFourthBallBought(true);
+    }
+  }
+
+  bool? whichBall(int index) {
+    print("$_isSecondBallBought, $_isThirdBallBought, $_isFourthBallBought");
+    print("$_gifts gifts");
+    if (index == 1) {
+      return _isSecondBallBought;
+    } else if (index == 2) {
+      return _isThirdBallBought;
+    } else if (index == 3) {
+      return _isFourthBallBought;
+    } else {
+      return true;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     selectedBall();
     allGifts();
+    isBallBought();
   }
 
   @override
@@ -137,8 +195,33 @@ class _ShopState extends State<Shop> {
                         SizedBox(
                           height: 4.h,
                         ),
-                        GiftPrice(
-                          price: _gifts,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              _gifts.toString(),
+                              style: TextStyle(
+                                fontFamily: "BerkshireSwash",
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.w800,
+                                color: Color(0xFFC52321),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 1.5.w,
+                            ),
+                            Container(
+                              width: screen_width * 0.1,
+                              height: screen_width * 0.1,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: AssetImage(giftImage),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -158,8 +241,20 @@ class _ShopState extends State<Shop> {
                             return GestureDetector(
                               onTap: () {
                                 if (_gifts! >= giftCards[index].price) {
+                                  buyNewBall(giftCards[index].price, index);
                                   newBallSelected(giftCards[index].image);
-                                  _selectedBallName = giftCards[index].image;
+                                  if (index > 0) {
+                                    newPlayingBallSelected(
+                                        widget.playingBallsNames[index]!);
+                                  }
+                                  setState(() {
+                                    _selectedBallName = giftCards[index].image;
+                                  });
+                                } else if (whichBall(index) == true) {
+                                  newBallSelected(giftCards[index].image);
+                                  setState(() {
+                                    _selectedBallName = giftCards[index].image;
+                                  });
                                 }
                               },
                               child: Column(
@@ -187,7 +282,9 @@ class _ShopState extends State<Shop> {
                                           ),
                                         )
                                       : GiftPrice(
-                                          price: giftCards[index].price),
+                                          isBought: whichBall(index),
+                                          price: giftCards[index].price,
+                                        ),
                                 ],
                               ),
                             );

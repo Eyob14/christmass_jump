@@ -40,7 +40,8 @@ class SharedPreferenceHelper {
     final prefs = await SharedPreferenceHelper.prefs;
     return prefs.getString('selectedBall');
   }
-    static Future<bool> setSelectedPlayingBall(String value) async {
+
+  static Future<bool> setSelectedPlayingBall(String value) async {
     final prefs = await SharedPreferenceHelper.prefs;
     return prefs.setString('selectedPlayingBall', value);
   }
@@ -48,6 +49,46 @@ class SharedPreferenceHelper {
   static Future<String?> getSelectedPlayingBall() async {
     final prefs = await SharedPreferenceHelper.prefs;
     return prefs.getString('selectedPlayingBall');
+  }
+
+  // static Future<bool> setFirstBallBought(bool value) async {
+  //   final prefs = await SharedPreferenceHelper.prefs;
+  //   return prefs.setBool('firstBallBought', value);
+  // }
+
+  // static Future<bool?> getFirstBallBought() async {
+  //   final prefs = await SharedPreferenceHelper.prefs;
+  //   return prefs.getBool('firstBallBought');
+  // }
+
+  static Future<bool> setSecondBallBought(bool value) async {
+    final prefs = await SharedPreferenceHelper.prefs;
+    return prefs.setBool('secondBallBought', value);
+  }
+
+  static Future<bool?> getSecondBallBought() async {
+    final prefs = await SharedPreferenceHelper.prefs;
+    return prefs.getBool('secondBallBought');
+  }
+
+  static Future<bool> setThirdBallBought(bool value) async {
+    final prefs = await SharedPreferenceHelper.prefs;
+    return prefs.setBool('thirdBallBought', value);
+  }
+
+  static Future<bool?> getThirdBallBought() async {
+    final prefs = await SharedPreferenceHelper.prefs;
+    return prefs.getBool('thirdBallBought');
+  }
+
+  static Future<bool> setFourthBallBought(bool value) async {
+    final prefs = await SharedPreferenceHelper.prefs;
+    return prefs.setBool('fourthBallBought', value);
+  }
+
+  static Future<bool?> getFourthBallBought() async {
+    final prefs = await SharedPreferenceHelper.prefs;
+    return prefs.getBool('fourthBallBought');
   }
 }
 

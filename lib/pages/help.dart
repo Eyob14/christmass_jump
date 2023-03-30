@@ -151,13 +151,19 @@ class Help extends StatelessWidget {
                         Positioned(
                           top: 1,
                           right: 8,
-                          child: Container(
-                            width: 23.w,
-                            height: 23.w,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(closeButton),
-                                fit: BoxFit.fill,
+                          child: GestureDetector(
+                            onTap: () {
+                              SoundManager.playButtonClickSound();
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              width: 23.w,
+                              height: 23.w,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(closeButton),
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                             ),
                           ),

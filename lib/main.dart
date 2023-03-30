@@ -37,6 +37,9 @@ class _MyAppState extends State<MyApp> {
     await SharedPreferenceHelper.setGifts(0);
     await SharedPreferenceHelper.setSelectedBall(firstGift);
     await SharedPreferenceHelper.setSelectedPlayingBall(firstBall);
+    await SharedPreferenceHelper.setFourthBallBought(false);
+    await SharedPreferenceHelper.setSecondBallBought(false);
+    await SharedPreferenceHelper.setThirdBallBought(false);
     return;
   }
 
@@ -84,7 +87,7 @@ class _MyAppState extends State<MyApp> {
                 );
               case shop:
                 return PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => const Shop(),
+                  pageBuilder: (_, __, ___) => Shop(),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) =>
                           FadeTransition(opacity: animation, child: child),

@@ -7,8 +7,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../gameComponents/gift.dart';
 import '../gameComponents/obstacle.dart';
+import '../gameComponents/obstacle_list.dart';
 import '../gameComponents/playing_ball.dart';
 import '../utils/constants.dart';
+import '../utils/shared_preference.dart';
 
 class Game extends StatefulWidget {
   const Game({super.key});
@@ -22,60 +24,74 @@ class _GameState extends State<Game> {
   double ballYAxis = 1;
   double ballXAxis = 0;
   int index = 0;
-  bool isGameOver = false;
   double obstacleX = 0.5;
   double obstacleY = -0.5;
   double giftX = 0.5;
   double giftY = -1;
   Random random = Random();
-
+  // static Timer timer;
   void startGame() {
     gift = 0;
     ballYAxis = 1;
-    obstacleX = random.nextDouble();
-    obstacleY = -1;
-    giftX = random.nextDouble();
-    giftY = -1;
+    obstacleX = random.nextInt(2001) / 1000 - 1;
+    obstacleY = -4;
+    giftX = random.nextInt(2001) / 1000 - 1;
+    giftY = -4.6;
     index = random.nextInt(4);
-    isGameOver = false;
     ballXAxis = 0;
     ballYAxis = 1;
 
-    Timer.periodic(const Duration(milliseconds: 50), (timer) {
-      setState(() {
-        obstacleY += 0.05;
-        giftY += 0.05;
-        // if the box get out of the screen
-        if (obstacleY > 1.2) {
-          obstacleY = -1;
-          obstacleX = random.nextDouble();
-          index = random.nextInt(4);
-        }
+    Timer.periodic(const Duration(milliseconds: 40), (timer) {
+      if (mounted) {
+        setState(() {
+          obstacleY += 0.05;
+          giftY += 0.045;
+          // if the box get out of the screen
+          if (obstacleY > 1.2) {
+            obstacleY = -2;
+            obstacleX = random.nextInt(2001) / 1000 - 1;
+            index = random.nextInt(4);
+          }
 
-        if (giftY > 1.2) {
-          giftY = -1;
-          giftX = random.nextDouble();
-        }
+          if (giftY > 1.2) {
+            giftY = -1.8;
+            giftX = random.nextInt(2001) / 1000 - 1;
+          }
 
-        if ((ballYAxis - giftY).abs() < 0.07 &&
-            (ballXAxis - giftX).abs() < 0.07) {
-          giftY = -1;
-          gift++;
-        }
+          if ((ballYAxis - giftY).abs() < 0.09 &&
+              (ballXAxis - giftX).abs() < 0.07) {
+            giftY = -2;
+            giftX = random.nextInt(2001) / 1000 - 1;
+            gift++;
+          }
 
-        if ((ballYAxis - obstacleY).abs() < 0.1 &&
-            (ballXAxis - obstacleX).abs() < 0.1) {
-          isGameOver = true;
-          timer.cancel();
-          Navigator.pushReplacementNamed(context, gameOver, arguments: gift);
-        }
-      });
+          if (isCollide(
+              index: index,
+              ballXAxis: ballXAxis,
+              ballYAxis: ballYAxis,
+              obstacleY: obstacleY,
+              obstacleX: obstacleX)) {
+            timer.cancel();
+            Navigator.pushReplacementNamed(context, gameOver, arguments: gift);
+          }
+        });
+      }
+    });
+  }
+
+  static String? selectedBallName;
+
+  void selectedPlayingBall() async {
+    final value = await SharedPreferenceHelper.getSelectedPlayingBall();
+    setState(() {
+      selectedBallName = value;
     });
   }
 
   @override
   void initState() {
     super.initState();
+    selectedPlayingBall();
     startGame();
   }
 
@@ -149,10 +165,10 @@ class _GameState extends State<Game> {
                             MediaQuery.of(context).size.width *
                             2;
 
-                        if (ballXAxis < -1) ballXAxis = -1;
-                        if (ballXAxis > 1) ballXAxis = 1;
-                        if (ballYAxis < -1) ballYAxis = -1;
-                        if (ballYAxis > 1) ballYAxis = 1;
+                        if (ballXAxis < -1.2) ballXAxis = -1.2;
+                        if (ballXAxis > 1.2) ballXAxis = 1.2;
+                        if (ballYAxis < -1.2) ballYAxis = -1;
+                        if (ballYAxis > 1.2) ballYAxis = 1;
                       });
                     },
 
@@ -160,22 +176,21 @@ class _GameState extends State<Game> {
                       children: [
                         AnimatedContainer(
                           alignment: Alignment(giftX, giftY),
-                          duration: Duration(milliseconds: 0),
-                          // color: Colors.white,
-                          child: Gift(),
+                          duration: const Duration(milliseconds: 0),
+                          child: const Gift(),
                         ),
                         AnimatedContainer(
                           alignment: Alignment(obstacleX, obstacleY),
-                          duration: Duration(milliseconds: 0),
-                          // color: Colors.white,
+                          duration: const Duration(milliseconds: 0),
                           child: Obstacle(
                             index: index,
                           ),
                         ),
                         AnimatedContainer(
                           alignment: Alignment(ballXAxis, ballYAxis),
-                          duration: Duration(milliseconds: 0),
-                          child: PlayingBall(),
+                          duration: const Duration(milliseconds: 0),
+                          child:
+                              PlayingBall(selectedBallName: selectedBallName),
                         ),
                         Container(
                           alignment: const Alignment(0, -1),
